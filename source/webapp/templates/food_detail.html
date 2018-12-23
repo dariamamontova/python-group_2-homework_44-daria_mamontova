@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}Блюдо{% endblock %}
+{% block content %}
+    <p>{{ food.name }}</p>
+    <img src="{{ food.photo.url }}" alt="Картинка еды">
+{% endblock %}
