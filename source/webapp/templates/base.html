@@ -20,6 +20,19 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
+            {% if request.user.is_authenticated %}
+                <li class="nav-item navbar-text">Привет, {{ request.user.username }}!</li>
+                <li class="nav-item">
+                    <a href="{% url 'logout' %}" class="nav-link">Выход</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'order_list' %}" class="nav-link">На главную</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a href="{% url 'login' %}" class="nav-link">Вход</a>
+                </li>
+            {% endif %}
             <li class="nav-item">
                 <a href="{% url 'order_list' %}" class="nav-link">Заказы</a>
             </li>

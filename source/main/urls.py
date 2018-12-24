@@ -20,6 +20,7 @@ from django.conf import settings
 from webapp.views import FoodDetailView, FoodCreateView, FoodUpdateView, OrderDetailView, OrderCreateView, \
     OrderUpdateView, OrderFoodCreateView, OrderListView, OrderRejectView, OrderDeliverView, \
     FoodDeleteView, OrderFoodUpdateView, FoodListView, OrderFoodDeleteView
+from accounts.views import login_view, logout_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,6 +38,8 @@ urlpatterns = [
     path('order/<int:pk>/cancel', OrderRejectView.as_view(), name='reject_order'),
     path('order/<int:pk>/deliver', OrderDeliverView.as_view(), name='order_deliver'),
     path('foods', FoodListView.as_view(), name='food_list'),
+    path('auth/login', login_view, name='login'),
+    path('auth/logout', logout_view, name='logout')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
