@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}Блюдо{% endblock %}
 {% block content %}
-    <p>{{ food.name }}</p>
     <img src="{{ food.photo.url }}" alt="Картинка еды">
-    <a href="{% url 'food_delete' food.pk %}">Удалить</a>
+    <p>Название: {{ food.name }}</p>
+    <p>Описание: {{ food.description }}</p>
+    <p>Цена: {{ food.price }} сом</p>
+    <a class="btn-dark p-1" href="{% url 'food_delete' food.pk %}">Удалить блюдо</a>
 {% endblock %}
