@@ -3,9 +3,11 @@
 {% block content %}
     {% for order in order_list %}
         <h4><a href="{% url 'order_detail' order.pk %}">Заказ № {{ order.pk }}</a></h4>
-        <p>Статус: {% if order.status == 'new' %}Новый{% elif order.status == 'on_way' %}В пути
-        {% elif order.status == 'preparing' %}Готовится{% elif order.status == 'delivered' %}Доставлен
-        {% else %}Отменен{% endif %}</p>
+        <p>Статус: {{ order.get_status_display }}</p>
+        {% if order.status == 'preparing' %}<a class="btn-dark p-2" href="{% url 'order_deliver' order.pk %}">
+            Взять заказ</a>{% endif %}
+        {% if order.status == 'on_way' %}<a class="btn-dark p-2" href="{% url 'order_deliver' order.pk %}">
+            Доставить заказ</a>{% endif %}
         <hr>
     {% endfor %}
 {% endblock %}

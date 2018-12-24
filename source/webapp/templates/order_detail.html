@@ -2,9 +2,7 @@
 {% block title %}Заказ{% endblock %}
 {% block content %}
     <h4>Заказ № {{ order.pk}}</h4>
-    <p>Статус: {% if order.status == 'new' %}Новый{% elif order.status == 'on_way' %}В пути
-        {% elif order.status == 'preparing' %}Готовится{% elif order.status == 'delivered' %}Доставлен
-        {% else %}Отменен{% endif %}</p>
+    <p>Статус: {{{ order.get_status_display }}</p>
     <p>Имя: {{ order.contact_name }}</p>
     <p>Контактный номер: {{ order.contact_phone }}</p>
     <p>Адрес доставки: {{ order.delivery_address }}</p>
@@ -15,7 +13,6 @@
         <a class="btn-dark p-2" href="{% url 'order_food_delete' order_food.pk %}">Удалить блюдо</a>
     {% endfor %}
     {% if order.status != 'canceled' %}<a class="btn-dark p-2" href="{% url 'reject_order' order.pk %}">Отменить</a>{% endif %}
-    {% if order.status != 'canceled' and order.status != 'delivered'%}<a class="btn-dark p-2" href="{% url 'order_deliver' order.pk %}">Взять заказ или доставить</a>{% endif %}
     <a class="btn-dark p-2" href="{% url 'order_update' order.pk %}">Изменить детали заказа</a>
     <a class="btn-dark p-2" href="{% url 'order_food_create' order.pk %}">Добавить блюдо</a>
 
