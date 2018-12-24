@@ -89,28 +89,12 @@ class OrderFoodUpdateView(UpdateView):
         form.instance.order = Order.objects.get(pk=self.kwargs.get('pk'))
         return super().form_valid(form)
 
-class OrderFoodDeleteView(DeleteView):
-    model = OrderFood
-    template_name = 'order_food_delete.html'
-
-    def get_success_url(self):
-        return reverse('order_detail', kwargs={'pk': self.object.order.pk})
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['order'] = Order.objects.get(pk=self.kwargs.get('pk'))
-        return context
-
-    def form_valid(self, form):
-        form.instance.order = Order.objects.get(pk=self.kwargs.get('pk'))
-        return super().form_valid(form)
-
 class OrderDeliverView(View):
     def get(self, *args, **kwargs):
         self.object = Order.objects.get(pk=self.kwargs.get('pk'))
         if self.object.status == 'preparing':
             self.object.status = 'on_way'
-        else:
+        elif self.object.status == 'on_way':
             self.object.status = 'delivered'
         self.object.save()
         return redirect('order_list')

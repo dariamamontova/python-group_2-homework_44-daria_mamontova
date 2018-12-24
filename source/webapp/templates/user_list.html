@@ -2,8 +2,7 @@
 {% block title %}Заказы{% endblock %}
 {% block content %}
     {% for user in user_list %}
-        <p>{{ user.first_name }}</p>
-        <h4>{{ user.last_name }}</h4>
+        <h4>{{ user.first_name }} {{ user.last_name }}</h4>
         <hr>
     {% endfor %}
 {% endblock %}

@@ -2,8 +2,10 @@
 {% block title %}Заказы{% endblock %}
 {% block content %}
     {% for order in order_list %}
-        <p>{{ order.status }}</p>
-        <h4><a href="{% url 'order_detail' order.pk %}">{{ order.contact_phone }}</a></h4>
+        <h4><a href="{% url 'order_detail' order.pk %}">Заказ № {{ order.pk }}</a></h4>
+        <p>Статус: {% if order.status == 'new' %}Новый{% elif order.status == 'on_way' %}В пути
+        {% elif order.status == 'preparing' %}Готовится{% elif order.status == 'delivered' %}Доставлен
+        {% else %}Отменен{% endif %}</p>
         <hr>
     {% endfor %}
 {% endblock %}
