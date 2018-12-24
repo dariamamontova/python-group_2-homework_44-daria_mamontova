@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Заказы{% endblock %}
+{% block content %}
+    {% for food in food_list %}
+        <h4><a href="{% url 'food_detail' food.pk %}">{{ food.name }}</a></h4>
+        <p>{{ food.de }}</p>
+        <hr>
+    {% endfor %}
+{% endblock %}

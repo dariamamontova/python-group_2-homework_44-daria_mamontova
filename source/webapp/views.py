@@ -129,3 +129,7 @@ class OrderListView(ListView):
 class UserListView(ListView):
     model = User
     template_name = 'user_list.html'
+
+class FoodListView(ListView):
+    model = Food
+    template_name = 'food_list.html'

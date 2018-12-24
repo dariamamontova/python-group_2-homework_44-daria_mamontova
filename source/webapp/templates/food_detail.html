@@ -6,4 +6,5 @@
     <p>Описание: {{ food.description }}</p>
     <p>Цена: {{ food.price }} сом</p>
     <a class="btn-dark p-1" href="{% url 'food_delete' food.pk %}">Удалить блюдо</a>
+    <a class="btn-dark p-1" href="{% url 'food_update' food.pk %}">Изменить блюдо</a>
 {% endblock %}
