@@ -80,14 +80,14 @@ class OrderFoodUpdateView(UpdateView):
     def get_success_url(self):
         return reverse('order_detail', kwargs={'pk': self.object.order.pk})
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['order'] = Order.objects.get(pk=self.kwargs.get('pk'))
-        return context
 
-    def form_valid(self, form):
-        form.instance.order = Order.objects.get(pk=self.kwargs.get('pk'))
-        return super().form_valid(form)
+
+class OrderFoodDeleteView(DeleteView):
+    model = OrderFood
+    template_name = 'order_food_delete.html'
+
+    def get_success_url(self):
+        return reverse('order_detail', kwargs={'pk': self.object.order.pk})
 
 class OrderDeliverView(View):
     def get(self, *args, **kwargs):
@@ -109,10 +109,6 @@ class OrderRejectView(View):
 class OrderListView(ListView):
     model = Order
     template_name = 'order_list.html'
-
-class UserListView(ListView):
-    model = User
-    template_name = 'user_list.html'
 
 class FoodListView(ListView):
     model = Food
