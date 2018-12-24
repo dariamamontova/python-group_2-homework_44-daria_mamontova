@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Заказ{% endblock %}
+{% block content %}
+    {{ order.contact_phone }}
+    <a href="{% url 'reject_order' order.pk %}">Отменить</a>
+    <a href="{% url 'order_deliver' order.pk %}">Доставить</a>
+    {% for order_food in order.foods.all %}
+        {{ order_food.food.name }}
+
+    {% endfor %}
+{% endblock %}

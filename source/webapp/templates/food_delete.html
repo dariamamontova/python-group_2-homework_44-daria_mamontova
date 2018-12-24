@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Удалить проект{% endblock %}
+
+{% block content %}
+    <h1>Удалить проект</h1>
+    <h5>Вы уверены, что хотите удалить проект </h5>
+    <form action="{% url 'food_delete' food.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+{% endblock %}
