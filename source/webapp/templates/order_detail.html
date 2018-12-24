@@ -12,7 +12,7 @@
     {% for order_food in order.foods.all %}
         <p>{{ order_food.food.name }}, количество: {{ order_food.amount }}</p>
     {% endfor %}
-    {% if order.status != 'canceled'%}<a class="btn-dark p-2" href="{% url 'reject_order' order.pk %}">Отменить</a>{% endif %}
+    {% if order.status != 'canceled' %}<a class="btn-dark p-2" href="{% url 'reject_order' order.pk %}">Отменить</a>{% endif %}
     {% if order.status != 'canceled' and order.status != 'delivered'%}<a class="btn-dark p-2" href="{% url 'order_deliver' order.pk %}">Взять заказ или доставить</a>{% endif %}
     <a class="btn-dark p-2" href="{% url 'order_update' order.pk %}">Изменить детали заказа</a>
     <a class="btn-dark p-2" href="{% url 'order_food_update' order.pk %}">Изменить блюда</a>
