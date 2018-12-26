@@ -9,11 +9,16 @@
     <h4>Корзина:</h4>
     {% for order_food in order.foods.all %}
         <p>{{ order_food.food.name }}, количество: {{ order_food.amount }}</p>
+        {% if perms.webapp.change_orderfood %}
         <a class="btn-dark p-2" href="{% url 'webapp:order_food_update' order_food.pk %}">Изменить блюдо</a>
+        {% endif %}
+        {% if perms.webapp.delete_orderfood %}
         <a class="btn-dark p-2" href="{% url 'webapp:order_food_delete' order_food.pk %}">Удалить блюдо</a>
+        {% endif %}
     {% endfor %}
+    {% if perms.webapp.change_order %}
     {% if order.status != 'canceled' %}<a class="btn-dark p-2" href="{% url 'webapp:reject_order' order.pk %}">Отменить</a>{% endif %}
     <a class="btn-dark p-2" href="{% url 'webapp:order_update' order.pk %}">Изменить детали заказа</a>
     <a class="btn-dark p-2" href="{% url 'webapp:order_food_create' order.pk %}">Добавить блюдо</a>
-
+{% endif %}
 {% endblock %}
