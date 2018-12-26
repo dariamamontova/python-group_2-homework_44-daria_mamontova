@@ -3,7 +3,7 @@
 {% block title %}Добавить заказ{% endblock %}
 
 {% block content %}
-    <form action="{% url 'order_create' %}" method="post">
+    <form action="{% url 'webapp:order_create' %}" method="post">
         {% csrf_token %}
         {{ formset.media }}
         {{ form.as_p }}

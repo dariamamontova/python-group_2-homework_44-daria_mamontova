@@ -9,11 +9,11 @@
     <h4>Корзина:</h4>
     {% for order_food in order.foods.all %}
         <p>{{ order_food.food.name }}, количество: {{ order_food.amount }}</p>
-        <a class="btn-dark p-2" href="{% url 'order_food_update' order_food.pk %}">Изменить блюдо</a>
-        <a class="btn-dark p-2" href="{% url 'order_food_delete' order_food.pk %}">Удалить блюдо</a>
+        <a class="btn-dark p-2" href="{% url 'webapp:order_food_update' order_food.pk %}">Изменить блюдо</a>
+        <a class="btn-dark p-2" href="{% url 'webapp:order_food_delete' order_food.pk %}">Удалить блюдо</a>
     {% endfor %}
-    {% if order.status != 'canceled' %}<a class="btn-dark p-2" href="{% url 'reject_order' order.pk %}">Отменить</a>{% endif %}
-    <a class="btn-dark p-2" href="{% url 'order_update' order.pk %}">Изменить детали заказа</a>
-    <a class="btn-dark p-2" href="{% url 'order_food_create' order.pk %}">Добавить блюдо</a>
+    {% if order.status != 'canceled' %}<a class="btn-dark p-2" href="{% url 'webapp:reject_order' order.pk %}">Отменить</a>{% endif %}
+    <a class="btn-dark p-2" href="{% url 'webapp:order_update' order.pk %}">Изменить детали заказа</a>
+    <a class="btn-dark p-2" href="{% url 'webapp:order_food_create' order.pk %}">Добавить блюдо</a>
 
 {% endblock %}
