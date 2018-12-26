@@ -5,10 +5,11 @@
         <h4><a href="{% url 'webapp:order_detail' order.pk %}">Заказ № {{ order.pk }}</a></h4>
         <p>Статус: {{ order.get_status_display }}</p>
         {% if perms.webapp.can_deliver %}
-        {% if order.status == 'preparing' %}<a class="btn-dark p-2" href="{% url 'webapp:order_deliver' order.pk %}">
-            Взять заказ</a>{% endif %}
-        {% if order.status == 'on_way' %}<a class="btn-dark p-2" href="{% url 'webapp:order_deliver' order.pk %}">
-            Доставить заказ</a>{% endif %}
+            {% if order.status == 'preparing' %}
+                <a class="btn btn-dark p-2" href="{% url 'webapp:order_deliver' order.pk %}">
+                    Взять заказ</a>{% endif %}
+            {% if order.status == 'on_way' %}<a class="btn btn-dark p-2" href="{% url 'webapp:order_deliver' order.pk %}">
+                Доставить заказ</a>{% endif %}
         {% endif %}
         <hr>
     {% endfor %}

@@ -21,8 +21,8 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             {% if request.user.is_authenticated %}
-                <li class="nav-item navbar-text">Привет, {{ request.user.username }}!</li>
-                <li class="nav-item">
+                <li class="nav-item navbar-text"><b>Привет, {{ request.user.username }}!</b></li>
+                <li class="nav-item active">
                     <a href="{% url 'accounts:logout' %}" class="nav-link">Выход</a>
                 </li>
             {% else %}
@@ -30,23 +30,27 @@
                     <a href="{% url 'accounts:login' %}" class="nav-link">Вход</a>
                 </li>
             {% endif %}
-            <li class="nav-item">
+            <li class="nav-item ml-5">
                 <a href="{% url 'webapp:order_list' %}" class="nav-link">Заказы</a>
             </li>
             <li class="nav-item">
-                <a href="{% url 'webapp:food_list' %}" class="nav-link">Блюда</a>
+                <a href="{% url 'webapp:food_list' %}" class="nav-link">Меню</a>
             </li>
-            <li class="nav-item">
-                <a href="{% url 'webapp:food_create' %}" class="nav-link">Добавить блюдо</a>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'webapp:order_create' %}" class="nav-link">Добавить заказ</a>
-            </li>
+            {% if perms.webapp.add_food %}
+                <li class="nav-item">
+                    <a href="{% url 'webapp:food_create' %}" class="nav-link">Добавить блюдо</a>
+                </li>
+            {% endif %}
+            {% if perms.webapp.add_order %}
+                <li class="nav-item">
+                    <a href="{% url 'webapp:order_create' %}" class="nav-link">Добавить заказ</a>
+                </li>
+            {% endif %}
             {% block menu %}{% endblock %}
         </ul>
     </div>
 </nav>
-<div class="container mt-3">
+<div class="container mt-4">
     {% block content %}{% endblock %}
 </div>
 <script src="{% static 'js/jquery.min.js' %}"></script>

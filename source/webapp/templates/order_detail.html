@@ -1,24 +1,30 @@
 {% extends 'base.html' %}
 {% block title %}Заказ{% endblock %}
 {% block content %}
-    <h4>Заказ № {{ order.pk}}</h4>
-    <p>Статус: {{ order.get_status_display }}</p>
-    <p>Имя: {{ order.contact_name }}</p>
-    <p>Контактный номер: {{ order.contact_phone }}</p>
-    <p>Адрес доставки: {{ order.delivery_address }}</p>
-    <h4>Корзина:</h4>
+    <h4><b>Заказ № {{ order.pk }}</b></h4>
+    <p><b>Статус:</b> {{ order.get_status_display }}</p>
+    <p><b>Имя:</b> {{ order.contact_name }}</p>
+    <p><b>Контактный номер:</b> {{ order.contact_phone }}</p>
+    <p><b>Адрес доставки:</b> {{ order.delivery_address }}</p>
+    <hr>
+    <h4><b>Корзина:</b></h4>
     {% for order_food in order.foods.all %}
         <p>{{ order_food.food.name }}, количество: {{ order_food.amount }}</p>
         {% if perms.webapp.change_orderfood %}
-        <a class="btn-dark p-2" href="{% url 'webapp:order_food_update' order_food.pk %}">Изменить блюдо</a>
+            <a class="btn btn-dark" href="{% url 'webapp:order_food_update' order_food.pk %}">Изменить блюдо</a>
         {% endif %}
         {% if perms.webapp.delete_orderfood %}
-        <a class="btn-dark p-2" href="{% url 'webapp:order_food_delete' order_food.pk %}">Удалить блюдо</a>
+            <a class="btn btn-dark" href="{% url 'webapp:order_food_delete' order_food.pk %}">Удалить блюдо</a>
         {% endif %}
+        <hr>
     {% endfor %}
-    {% if perms.webapp.change_order %}
-    {% if order.status != 'canceled' %}<a class="btn-dark p-2" href="{% url 'webapp:reject_order' order.pk %}">Отменить</a>{% endif %}
-    <a class="btn-dark p-2" href="{% url 'webapp:order_update' order.pk %}">Изменить детали заказа</a>
-    <a class="btn-dark p-2" href="{% url 'webapp:order_food_create' order.pk %}">Добавить блюдо</a>
-{% endif %}
+    <div class="mb-3">
+        {% if perms.webapp.change_order %}
+            {% if order.status != 'canceled' %}
+                <a class="btn btn-danger" href="{% url 'webapp:reject_order' order.pk %}">Отменить</a>
+            {% endif %}
+            <a class="btn btn-danger" href="{% url 'webapp:order_update' order.pk %}">Изменить детали заказа</a>
+            <a class="btn btn-danger" href="{% url 'webapp:order_food_create' order.pk %}">Добавить блюдо</a>
+        {% endif %}
+    </div>
 {% endblock %}

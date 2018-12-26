@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 {% block title %}Блюдо{% endblock %}
 {% block content %}
-    <img src="{{ food.photo.url }}" alt="Картинка еды">
-    <p>Название: {{ food.name }}</p>
-    <p>Описание: {{ food.description }}</p>
-    <p>Цена: {{ food.price }} сом</p>
-    <a class="btn-dark p-1" href="{% url 'webapp:food_delete' food.pk %}">Удалить блюдо</a>
-    <a class="btn-dark p-1" href="{% url 'webapp:food_update' food.pk %}">Изменить блюдо</a>
+    <img src="{{ food.photo.url }}" class="rounded " alt="Картинка еды">
+    <div class="m-3">
+        <p>Название: {{ food.name }}</p>
+        <p>Описание: {{ food.description }}</p>
+        <p>Цена: {{ food.price }} сом</p>
+        {% if perms.webapp.delete_orderfood %}
+            <a class="btn btn-dark" href="{% url 'webapp:food_delete' food.pk %}">Удалить блюдо</a>
+        {% endif %}
+        {% if perms.webapp.change_orderfood %}
+            <a class="btn btn-dark" href="{% url 'webapp:food_update' food.pk %}">Изменить блюдо</a>
+        {% endif %}
+    </div>
 {% endblock %}
