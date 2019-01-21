@@ -1,10 +1,11 @@
-from django.views.generic import DetailView, CreateView, UpdateView, View, ListView, DeleteView
+from django.views.generic import DetailView, CreateView, UpdateView, View, ListView, DeleteView, FormView
 from django.urls import reverse, reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from webapp.models import Food, Order, OrderFood, User
 from webapp.forms import FoodForm, OrderForm, OrderFoodForm
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import get_object_or_404
 
 class FoodDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = Food
@@ -50,10 +51,13 @@ class OrderCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         form.instance.operator = self.request.user
         return super().form_valid(form)
 
-class OrderDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+
+class OrderDetailView(FormView, LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = Order
+    form_class = OrderFoodForm
     template_name = 'order_detail.html'
     permission_required = 'webapp.view_order'
+
 
 class OrderUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Order
@@ -64,40 +68,69 @@ class OrderUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('webapp:order_detail', kwargs={'pk': self.object.pk})
 
+
 class OrderFoodCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = OrderFood
     form_class = OrderFoodForm
-    template_name = 'order_food_create.html'
     permission_required = 'webapp.add_orderfood'
 
-    def get_success_url(self):
-        return reverse('webapp:order_detail', kwargs={'pk': self.object.order.pk})
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['order'] = Order.objects.get(pk=self.kwargs.get('pk'))
-        return context
-
     def form_valid(self, form):
-        form.instance.order = Order.objects.get(pk=self.kwargs.get('pk'))
-        return super().form_valid(form)
+        order = get_object_or_404(Order, pk=self.kwargs.get('pk'))
+        form.instance.order = order
+        order_food = form.save()
+        return JsonResponse({
+            'food_name': order_food.food.name,
+            'food_pk': order_food.food.pk,
+            'amount': order_food.amount,
+            'pk': order_food.pk,
+            'edit_url': reverse('webapp:order_food_update', kwargs={'pk': order_food.pk})
+        })
+
+    def form_invalid(self, form):
+        return JsonResponse({
+            'errors': form.errors
+        }, status='422')
+
 
 class OrderFoodUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = OrderFood
     form_class = OrderFoodForm
-    template_name = 'order_food_update.html'
     permission_required = 'webapp.change_orderfood'
 
-    def get_success_url(self):
-        return reverse('webapp:order_detail', kwargs={'pk': self.object.order.pk})
+    def form_valid(self, form):
+        order_food = form.save()
+        return JsonResponse({
+            'food_name': order_food.food.name,
+            'food_pk': order_food.food.pk,
+            'amount': order_food.amount,
+            'pk': order_food.pk
+        })
+
+    def form_invalid(self, form):
+        return JsonResponse({
+            'errors': form.errors
+}, status='422')
+
+# class OrderFoodDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+#     model = OrderFood
+#     template_name = 'order_food_delete.html'
+#     permission_required = 'webapp.delete_orderfood'
+#
+#     def get_success_url(self):
+#         return reverse('webapp:order_detail', kwargs={'pk': self.object.order.pk})
 
 class OrderFoodDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = OrderFood
-    template_name = 'order_food_delete.html'
     permission_required = 'webapp.delete_orderfood'
 
-    def get_success_url(self):
-        return reverse('webapp:order_detail', kwargs={'pk': self.object.order.pk})
+    def delete(self, request, *args, **kwargs):
+        self.object = OrderFood.objects.get(pk=self.kwargs.get('pk'))
+        pk = self.object.pk
+        self.object.delete()
+        return JsonResponse({
+            'pk': pk
+        })
+
 
 class OrderDeliverView(LoginRequiredMixin, PermissionRequiredMixin, View):
     permission_required = 'can_deliver'
@@ -120,12 +153,15 @@ class OrderRejectView(LoginRequiredMixin, View):
         self.object.save()
         return redirect('webapp:order_list')
 
+
 class OrderListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Order
     template_name = 'order_list.html'
     permission_required = 'webapp.view_order'
 
+
 class FoodListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Food
     template_name = 'food_list.html'
     permission_required = 'webapp.view_food'
+
